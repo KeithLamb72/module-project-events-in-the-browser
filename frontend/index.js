@@ -74,20 +74,59 @@ function moduleProject2() {
     let isDown = evt.key === keys.down
     let isLeft = evt.key === keys.left
     let isRight = evt.key === keys.right
+    let isSpacebar = evt.key === keys.space
+
+    let targeted = document.querySelector('.targeted')
 
     if(isUp) {
-      console.log('you clicked isUp')
+      if (targeted.parentElement.previousElementSibling) {
+        let idx = Array.from(targeted.parentElement.children).indexOf(targeted)
+        targeted.classList.remove('targeted')
+        targeted.parentElement.previousElementSibling.children[idx].classList.add('targeted')
+      }
     } else if (isDown) {
-      console.log('you clicked isDown')
+      if (targeted.parentElement.nextElementSibling) {
+        let idx = Array.from(targeted.parentElement.children).indexOf(targeted)
+        targeted.classList.remove('targeted')
+        targeted.parentElement.nextElementSibling.children[idx].classList.add('targeted')
+      }
     } else if (isLeft) {
-      console.log('you clicked isLeft')
+      if (targeted.previousElementSibling) {
+        targeted.classList.remove('targeted')
+        targeted.previousElementSibling.classList.add('targeted')
+      }
     } else if (isRight) {
-      console.log('you clicked isRight')
+      if (targeted.nextElementSibling) {
+        targeted.classList.remove('targeted')
+        targeted.nextElementSibling.classList.add('targeted')
+      }
     }
-    // 👉 TASK 4 - Use the space bar to exterminate a mosquito 👈
 
+    // 👉 TASK 4 - Use the space bar to exterminate a mosquito 👈
+    else if (isSpacebar) {
+      let mosquito = targeted.firstChild
+
+      if (mosquito && mosquito.dataset.status === 'alive') {
+        mosquito.dataset.status = 'dead'
+        mosquito.parentElement.style.backgroundColor = 'red'
+      }
+  
     // 👉 TASK 5 - End the game 👈
-  })
+    let liveMosquitoes = document.querySelectorAll('[data-status=alive]')
+     if (!liveMosquitoes.length) {
+      let elapsed = getTimeElapsed()
+      document.querySelector('p.info').textContent =
+      `Extremination completed in ${elapsed / 1000} seconds!`
+
+      let restartBtn = document.createElement('button')
+      restartBtn.textContent = 'Restart'
+      restartBtn.addEventListener('click', () => {
+        location.reload()
+      })
+      document.querySelector('h2').insertAdjacentElement('beforeend', restartBtn)
+    }
+  }
+})
   // 👆 WORK WORK ABOVE THIS LINE 👆
 }
 
